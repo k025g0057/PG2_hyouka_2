@@ -35,12 +35,12 @@ void Player::Update(char* keys) {
     // 長押し発射（SPACEキーが押されている間）
     if (keys[DIK_SPACE]) {
         if (shotTimer_ <= 0) {
-            // 配列の中から「撃てる（isActiveがfalse）」弾を探す
+           
             for (int i = 0; i < 20; i++) {
                 if (bullets_[i]->GetIsActive() == false) {
                     bullets_[i]->Fire(posX_, posY_);
-                    shotTimer_ = 10; // 10フレームごとに発射（この値を変えると連射速度が変わる）
-                    break; // 1回につき1発撃てばいいのでループを抜ける
+                    shotTimer_ = 10; 
+                    break; 
                 }
             }
         }

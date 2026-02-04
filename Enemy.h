@@ -2,7 +2,7 @@
 
 class Enemy {
 private:
-    // 敵の座標・属性
+    // 敵
     int posX_;
     int posY_;
     int speedX_;

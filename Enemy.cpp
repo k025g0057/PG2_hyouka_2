@@ -16,13 +16,13 @@ void Enemy::Update() {
         // --- 自動移動 ---
         posX_ += speedX_;
 
-        // 画面の端で跳ね返る処理
+        
         if (posX_ - radius_ <= 0 || posX_ + radius_ >= 1280) {
             speedX_ *= -1;
         }
     } else {
         // --- リスポーン処理 ---
-        // 撃破されても、即座に中央上部で復活させる
+     
         posX_ = 640;
         posY_ = 150;
         isAlive_ = true;
@@ -32,7 +32,7 @@ void Enemy::Update() {
 // 描画処理
 void Enemy::Draw() {
     if (isAlive_) {
-        // 敵は赤色で描画
+   
         Novice::DrawEllipse(posX_, posY_, radius_, radius_, 0.0f, RED, kFillModeSolid);
     }
 }
