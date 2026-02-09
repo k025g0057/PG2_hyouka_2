@@ -1,8 +1,8 @@
 ﻿#include "Scene.h"
 #include <Novice.h>
 #include <math.h>
-#include"Player.h"
-#include"Enemy.h"
+#include "Player.h"
+#include "Enemy.h"
 
 // --- TitleScene ---
 void TitleScene::Update(char* keys, char* preKeys) {
@@ -27,38 +27,66 @@ void GameScene::Update(char* keys, char* preKeys) {
     player_->Update(keys);
     enemy_->Update();
 
-    // 弾20発分と敵の当たり判定をループさせる
-    for (int i = 0; i < 20; i++) {
-        Bullet* b = player_->GetBullet(i); // Playerクラスにこのゲッターを追加
+    // 1. 敵とプレイヤーの当たり判定（ゲームオーバー判定）
+    if (enemy_->GetIsAlive()) {
+        if (CheckCollision(player_->GetX(), player_->GetY(), player_->GetRadius(),
+            enemy_->GetX(), enemy_->GetY(), enemy_->GetRadius())) {
+            nextScene_ = GAMEOVER;
+            changeScene_ = true;
+        }
+    }
 
+    // 2. 弾と敵の当たり判定
+    for (int i = 0; i < 20; i++) {
+        Bullet* b = player_->GetBullet(i);
         if (b->GetIsActive() && enemy_->GetIsAlive()) {
             if (CheckCollision(b->GetX(), b->GetY(), b->GetRadius(),
                 enemy_->GetX(), enemy_->GetY(), enemy_->GetRadius())) {
-                enemy_->Kill();
+
+                enemy_->OnDamage(); // HPを減らす
                 b->SetIsActive(false);
-                nextScene_ = CLEAR;
-                changeScene_ = true;
+
+                if (enemy_->GetHp() <= 0) {
+                    enemy_->Kill();
+                    nextScene_ = CLEAR;
+                    changeScene_ = true;
+                }
             }
         }
     }
 }
-void GameScene::Draw() { player_->Draw(); enemy_->Draw(); }
+
+void GameScene::Draw() {
+    player_->Draw();
+    enemy_->Draw();
+}
 
 // --- ClearScene ---
 void ClearScene::Update(char* keys, char* preKeys) {
-    // Rキーでゲーム再開
     if (keys[DIK_R] && !preKeys[DIK_R]) {
         nextScene_ = GAME;
         changeScene_ = true;
     }
-    // Enterキーでタイトルへ
     if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
         nextScene_ = TITLE;
         changeScene_ = true;
     }
 }
+
 void ClearScene::Draw() {
     Novice::ScreenPrintf(550, 300, "STAGE CLEAR!");
     Novice::ScreenPrintf(510, 350, "PRESS R TO PLAY AGAIN");
     Novice::ScreenPrintf(510, 380, "PRESS ENTER TO TITLE");
+}
+
+// --- GameOverScene ---
+void GameOverScene::Update(char* keys, char* preKeys) {
+    if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+        changeScene_ = true;
+    }
+}
+
+void GameOverScene::Draw() {
+    Novice::ScreenPrintf(550, 300, "GAME OVER");
+    Novice::ScreenPrintf(510, 350, "PRESS ENTER TO TITLE");
 }

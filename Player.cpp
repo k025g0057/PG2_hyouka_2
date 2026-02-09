@@ -4,7 +4,7 @@
 Player::Player() {
     posX_ = 640;
     posY_ = 600;
-    speed_ = 5;
+    speed_ = 7;
     radius_ = 20;
     shotTimer_ = 0;
 

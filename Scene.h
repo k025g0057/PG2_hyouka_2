@@ -2,8 +2,8 @@
 #include "Player.h"
 #include "Enemy.h"
 
-// シーンの種類にCLEARを追加
-enum SceneType { TITLE, GAME, CLEAR };
+// シーンの種類にGAMEOVERを追加
+enum SceneType { TITLE, GAME, CLEAR, GAMEOVER };
 
 class IScene {
 public:
@@ -52,5 +52,17 @@ public:
     void Update(char* keys, char* preKeys) override;
     void Draw() override;
     SceneType GetNextScene() const override { return nextScene_; }
+    bool ShouldChangeScene() const override { return changeScene_; }
+};
+
+// --- ゲームオーバーシーン (新規追加) ---
+class GameOverScene : public IScene {
+private:
+    bool changeScene_ = false;
+public:
+    void Update(char* keys, char* preKeys) override;
+    void Draw() override;
+    // ゲームオーバー後はタイトルへ戻る設定
+    SceneType GetNextScene() const override { return TITLE; }
     bool ShouldChangeScene() const override { return changeScene_; }
 };

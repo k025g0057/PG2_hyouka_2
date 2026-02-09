@@ -1,7 +1,7 @@
 ﻿#include <Novice.h>
 #include "Scene.h"
 
-const char kWindowTitle[] = "LC1b_23_ハヤシ_テルト_タイトル";
+const char kWindowTitle[] = "LC1B_23_ハヤシ_テルト_PG評価課題2の道のり";
 
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
     Novice::Initialize(kWindowTitle, 1280, 720);
@@ -27,6 +27,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
             if (next == GAME) currentScene = new GameScene();
             else if (next == CLEAR) currentScene = new ClearScene();
+            else if (next == GAMEOVER) currentScene = new GameOverScene(); // 追加
             else currentScene = new TitleScene();
         }
 
